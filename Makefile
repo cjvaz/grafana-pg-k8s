@@ -85,7 +85,7 @@ port-forward:
 .PHONY: port-forward-postgres
 port-forward-postgres:
 	@echo "🐘 Iniciando port-forward para PostgreSQL (localhost:5432)..."
-	@kubectl port-forward svc/$(POSTGRES_RELEASE) 5432:5432
+	@kubectl port-forward svc/$(POSTGRES_RELEASE)-postgresql 5432:5432
 
 .PHONY: get-grafana-password
 get-grafana-password:
