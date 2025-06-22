@@ -1,0 +1,19 @@
+adminUser: admin
+adminPassword: adminpass
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: PostgreSQL
+      type: postgres
+      access: proxy
+      isDefault: true
+      database: grafanadb
+      user: grafana
+      secureJsonData:
+        password: grafanapass
+      jsonData:
+        sslmode: disable
+        postgresVersion: 1200
+        timeInterval: "5s"
+        server: my-postgres-postgresql.default.svc.cluster.local:5432

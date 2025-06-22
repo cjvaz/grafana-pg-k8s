@@ -1,0 +1,236 @@
+# =============================================================================
+# Grafana + PostgreSQL no Kubernetes com Kind - .gitignore
+# =============================================================================
+
+# Volumes e dados persistentes
+kind-volumes/
+volumes/
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+log/
+
+# Arquivos temporários do Kubernetes
+*.tmp
+*.temp
+temp/
+tmp/
+cluster-config.yaml
+
+# Secrets e configurações sensíveis
+secrets/
+*.secret
+*.key
+*.pem
+*.p12
+*.pfx
+config/secrets/
+*-secret.yaml
+*-secrets.yaml
+
+# Backups
+*.backup
+*.bak
+backups/
+dump/
+*.dump
+*.sql.gz
+
+# Arquivos de configuração local/override
+*-local.yaml
+*-override.yaml
+local-values.yaml
+override-values.yaml
+values-local.yaml
+values-override.yaml
+
+# Helm
+charts/
+Chart.lock
+*.tgz
+
+# Kubernetes contextos e configs
+kubeconfig
+.kube/
+*kubeconfig*
+*.kubeconfig
+
+# =============================================================================
+# Sistema Operacional
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.nfs*
+
+# =============================================================================
+# Editores e IDEs
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Ferramentas de Desenvolvimento
+# =============================================================================
+
+# Git
+*.orig
+*.rej
+
+# Terraform (caso seja usado)
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.tfplan
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Node.js (caso tenha scripts)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+
+# Python (caso tenha scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env
+
+# =============================================================================
+# Arquivos de Runtime
+# =============================================================================
+
+# PID files
+*.pid
+
+# Core dumps
+core.*
+
+# Crash logs
+crash.log
+hs_err_pid*
+
+# =============================================================================
+# Certificados e Chaves
+# =============================================================================
+
+# SSL/TLS
+*.crt
+*.csr
+*.der
+*.key
+*.p7b
+*.p7c
+*.p12
+*.pem
+*.pfx
+tls/
+ssl/
+certs/
+certificates/
+
+# SSH
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+known_hosts
+
+# =============================================================================
+# Arquivos Específicos do Projeto
+# =============================================================================
+
+# Arquivos de configuração gerados automaticamente
+generated/
+auto-generated/
+
+# Cache
+.cache/
+cache/
+
+# Monitoring data
+monitoring/
+metrics/
+prometheus/
+grafana/data/
+
+# Test outputs
+test-results/
+coverage/
+
+# Build artifacts
+build/
+dist/
+target/ 

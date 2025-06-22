@@ -1,0 +1,8 @@
+primary:
+  persistence:
+    enabled: true
+    existingClaim: postgres-pvc
+auth:
+  username: grafana
+  password: grafanapass
+  database: grafanadb
