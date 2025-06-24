@@ -43,9 +43,9 @@ cluster-info:
 	@echo "ℹ️  Informações do cluster:"
 	@kubectl cluster-info --context kind-$(CLUSTER_NAME)
 	@echo "\n📊 Nodes:"
-	@kubectl get nodes
+	@kubectl get nodes --context kind-$(CLUSTER_NAME)
 	@echo "\n🏷️  Namespaces:"
-	@kubectl get namespaces
+	@kubectl get namespaces --context kind-$(CLUSTER_NAME)
 
 # =============================================================================
 # Instalação dos Serviços
@@ -54,7 +54,7 @@ cluster-info:
 .PHONY: apply-pvc
 apply-pvc:
 	@echo "💾 Aplicando PersistentVolumeClaim..."
-	@kubectl apply -f pv-pvc-postgres.yaml
+	@kubectl apply -f pv-pvc-postgres.yaml --context kind-$(CLUSTER_NAME)
 
 .PHONY: install-postgres
 install-postgres:
@@ -80,17 +80,17 @@ install-all: setup create-cluster apply-pvc install-postgres install-grafana
 .PHONY: port-forward
 port-forward:
 	@echo "🌐 Iniciando port-forward para Grafana (http://localhost:3000)..."
-	@kubectl port-forward svc/$(GRAFANA_RELEASE) 3000:3000
+	@kubectl port-forward svc/$(GRAFANA_RELEASE) 3000:3000 --context kind-$(CLUSTER_NAME)
 
 .PHONY: port-forward-postgres
 port-forward-postgres:
 	@echo "🐘 Iniciando port-forward para PostgreSQL (localhost:5432)..."
-	@kubectl port-forward svc/$(POSTGRES_RELEASE)-postgresql 5432:5432
+	@kubectl port-forward svc/$(POSTGRES_RELEASE)-postgresql 5432:5432 --context kind-$(CLUSTER_NAME)
 
 .PHONY: get-grafana-password
 get-grafana-password:
 	@echo "🔐 Senha do administrador do Grafana:"
-	@kubectl get secret $(GRAFANA_RELEASE)-admin -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode
+	@kubectl get secret $(GRAFANA_RELEASE)-admin -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" --context kind-$(CLUSTER_NAME) | base64 --decode
 	@echo ""
 
 # =============================================================================
@@ -101,23 +101,23 @@ get-grafana-password:
 status:
 	@echo "📊 Status dos serviços:"
 	@echo "\n🎯 Pods:"
-	@kubectl get pods
+	@kubectl get pods --context kind-$(CLUSTER_NAME)
 	@echo "\n🌐 Services:"
-	@kubectl get svc
+	@kubectl get svc --context kind-$(CLUSTER_NAME)
 	@echo "\n💾 PVCs:"
-	@kubectl get pvc
+	@kubectl get pvc --context kind-$(CLUSTER_NAME)
 	@echo "\n🔐 Secrets:"
-	@kubectl get secrets
+	@kubectl get secrets --context kind-$(CLUSTER_NAME)
 
 .PHONY: logs-grafana
 logs-grafana:
 	@echo "📋 Logs do Grafana:"
-	@kubectl logs -l app.kubernetes.io/name=grafana --tail=50
+	@kubectl logs -l app.kubernetes.io/name=grafana --tail=50 --context kind-$(CLUSTER_NAME)
 
 .PHONY: logs-postgres
 logs-postgres:
 	@echo "📋 Logs do PostgreSQL:"
-	@kubectl logs -l app.kubernetes.io/name=postgresql --tail=50
+	@kubectl logs -l app.kubernetes.io/name=postgresql --tail=50 --context kind-$(CLUSTER_NAME)
 
 # =============================================================================
 # Utilitários
@@ -126,19 +126,19 @@ logs-postgres:
 .PHONY: restart-grafana
 restart-grafana:
 	@echo "🔄 Reiniciando Grafana..."
-	@kubectl rollout restart deployment/$(GRAFANA_RELEASE)
-	@kubectl rollout status deployment/$(GRAFANA_RELEASE)
+	@kubectl rollout restart deployment/$(GRAFANA_RELEASE) --context kind-$(CLUSTER_NAME)
+	@kubectl rollout status deployment/$(GRAFANA_RELEASE) --context kind-$(CLUSTER_NAME)
 
 .PHONY: restart-postgres
 restart-postgres:
 	@echo "🔄 Reiniciando PostgreSQL..."
-	@kubectl rollout restart statefulset/$(POSTGRES_RELEASE)-postgresql
-	@kubectl rollout status statefulset/$(POSTGRES_RELEASE)-postgresql
+	@kubectl rollout restart statefulset/$(POSTGRES_RELEASE)-postgresql --context kind-$(CLUSTER_NAME)
+	@kubectl rollout status statefulset/$(POSTGRES_RELEASE)-postgresql --context kind-$(CLUSTER_NAME)
 
 .PHONY: shell-postgres
 shell-postgres:
 	@echo "🐘 Conectando ao PostgreSQL..."
-	@kubectl exec -it $(POSTGRES_RELEASE)-postgresql-0 -- psql -U grafana -d grafanadb
+	@kubectl exec -it $(POSTGRES_RELEASE)-postgresql-0 --context kind-$(CLUSTER_NAME) -- psql -U grafana -d grafanadb
 
 # =============================================================================
 # Limpeza
@@ -169,6 +169,7 @@ clean:
 .PHONY: help
 help:
 	@echo "🚀 Grafana + PostgreSQL no Kubernetes com Kind"
+	@echo "🎯 Cluster: $(CLUSTER_NAME) (context: kind-$(CLUSTER_NAME))"
 	@echo ""
 	@echo "📋 Comandos disponíveis:"
 	@echo ""
