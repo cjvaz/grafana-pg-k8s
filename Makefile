@@ -73,6 +73,23 @@ install-all: setup create-cluster apply-pvc install-postgres install-grafana
 	@echo "🎉 Instalação completa concluída!"
 	@echo "📝 Execute 'make status' para verificar o status dos serviços"
 
+.PHONY: resume
+resume:
+	@echo "🔄 Retomando cluster após reinício do sistema..."
+	@echo "📋 Verificando Docker..."
+	@docker info > /dev/null 2>&1 || (echo "❌ Docker não está rodando. Inicie o Docker Desktop primeiro." && exit 1)
+	@echo "🔍 Verificando cluster Kind..."
+	@kind get clusters | grep -q "$(CLUSTER_NAME)" || (echo "❌ Cluster $(CLUSTER_NAME) não encontrado. Execute 'make create-cluster' primeiro." && exit 1)
+	@echo "⏳ Aguardando pods iniciarem..."
+	@kubectl wait --for=condition=ready pod --all --timeout=300s --context kind-$(CLUSTER_NAME) || true
+	@echo "📊 Status atual:"
+	@make status
+	@echo ""
+	@echo "✅ Cluster pronto!"
+	@echo "📝 Para acessar os serviços, execute:"
+	@echo "   🌐 Grafana: make port-forward"
+	@echo "   🐘 PostgreSQL: make port-forward-postgres"
+
 # =============================================================================
 # Port Forward e Acesso
 # =============================================================================
@@ -177,6 +194,7 @@ help:
 	@echo "  setup                 - Prepara o ambiente (cria diretórios, instala helm deps)"
 	@echo "  create-cluster        - Cria o cluster Kubernetes com Kind"
 	@echo "  install-all           - Instalação completa (setup + cluster + serviços)"
+	@echo "  resume                - Retoma cluster após reiniciar o computador"
 	@echo ""
 	@echo "📦 Instalação Individual:"
 	@echo "  apply-pvc            - Aplica PersistentVolumeClaim"

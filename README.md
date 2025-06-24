@@ -118,6 +118,38 @@ make get-grafana-password
    - Usuário: `admin`
    - Senha: (usar comando acima)
 
+## 🔄 Retomando Trabalho Após Reiniciar o Computador
+
+Quando você reiniciar o computador, **seus dados persistem**, mas os serviços param de executar. Para retomar o trabalho:
+
+### **🚀 Método Rápido (Recomendado):**
+```bash
+# Um comando que faz tudo automaticamente
+make resume
+```
+
+### **📝 Método Manual (Passo a Passo):**
+```bash
+# 1. Verificar se Docker está rodando
+docker ps
+
+# 2. Verificar se cluster existe
+kind get clusters
+
+# 3. Verificar status dos serviços
+make status
+
+# 4. Reativar port-forwards
+make port-forward          # Terminal 1 - Grafana
+make port-forward-postgres # Terminal 2 - PostgreSQL (opcional)
+```
+
+### **⚠️ Se algo der errado:**
+```bash
+# Reset completo (seus dados serão mantidos)
+make destroy && make install-all
+```
+
 ## 📖 Comandos Disponíveis
 
 Execute `make help` para ver todos os comandos ou consulte a lista abaixo:
